@@ -19,7 +19,7 @@
 
 > Build With AI
 >
-> **Team Name:** Left Shift
+> **Team Name:** Hacknotricks
 
 ---
 
@@ -169,7 +169,7 @@ Dashboard
 
 ---
 
-# 👨‍💻 Team Left Shift
+# 👨‍💻 Team Hacknotricks
 
 | Name | Role |
 |------|------|
@@ -203,4 +203,4 @@ Database → MongoDB Atlas
 
 # 📜 License
 
-Developed by **Team Left Shift** for **Build With Ai**.
+Developed by **Team Hacknotricks** for **Build With Ai**.
