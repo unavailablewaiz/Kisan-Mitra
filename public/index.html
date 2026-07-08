@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kisan Mitra — Smart Farming Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ══════════════════════════════════════
+   CSS VARIABLES
+══════════════════════════════════════ */
+:root {
+  --g900: #0a3d1c;
+  --g800: #0f4d23;
+  --g700: #155f2c;
+  --g600: #1e7a39;
+  --g500: #2a9648;
+  --g400: #45b060;
+  --g300: #7dcf97;
+  --g200: #b3e8c3;
+  --g100: #e6f5ec;
+  --g50:  #f2faf5;
+  --gold: #b8861e;
+  --gold-light: #d4a43a;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --shadow-green: 0 6px 20px rgba(21,95,44,.2);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,.1), 0 6px 16px rgba(0,0,0,.06);
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-alt: #f8faf8;
+  --bg-alt2: #f2f4f2;
+  --surface: #ffffff;
+  --surface2: #f2faf5;
+  --border: #e4e8e4;
+  --border-green: #b3e8c3;
+  --text-primary: #111d14;
+  --text-secondary: #3d5243;
+  --text-muted: #8aa08f;
+  --nav-bg: rgba(255,255,255,0.97);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.07);
+  --shadow-lg: 0 10px 36px rgba(0,0,0,.09);
+  --card-hover: #f0faf3;
+  --chip-bg: #f0faf3;
+  --chip-color: #155f2c;
+  --logo-name: #0f4d23;
+  --arch-bg: #f8faf8;
+  --ghost-border: #d0d8d0;
+  --ghost-color: #3d5243;
+  --hero-overlay: linear-gradient(120deg, #ffffff 0%, #f2faf5 50%, #e2f5eb 100%);
+}
+
+[data-theme="dark"] {
+  --bg: #080f0a;
+  --bg-alt: #0d1810;
+  --bg-alt2: #111d14;
+  --surface: #0f1d12;
+  --surface2: #152019;
+  --border: #1e3022;
+  --border-green: #1e4025;
+  --text-primary: #e8f5ec;
+  --text-secondary: #8ab898;
+  --text-muted: #4a7255;
+  --nav-bg: rgba(8,15,10,0.97);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 10px 36px rgba(0,0,0,.6);
+  --card-hover: #152019;
+  --chip-bg: #152019;
+  --chip-color: #7dcf97;
+  --logo-name: #7dcf97;
+  --arch-bg: #0d1810;
+  --ghost-border: #1e3022;
+  --ghost-color: #8ab898;
+  --hero-overlay: linear-gradient(120deg, #080f0a 0%, #0d1810 50%, #0f2014 100%);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.65;
+  transition: background .35s, color .35s;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-alt); }
+::-webkit-scrollbar-thumb { background: var(--g400); border-radius: 4px; }
+
+/* ══════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════ */
+.theme-toggle {
+  width: 52px; height: 28px;
+  background: var(--border);
+  border-radius: 100px; border: none; cursor: pointer;
+  display: flex; align-items: center; padding: 3px;
+  transition: background .3s; flex-shrink: 0;
+}
+.toggle-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--g700), var(--g400));
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .62rem; color: #fff;
+}
+[data-theme="dark"] .toggle-thumb { transform: translateX(24px); }
+[data-theme="dark"] .theme-toggle { background: var(--g800); }
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  height: 68px; display: flex; align-items: center; padding: 0 4%;
+  transition: box-shadow .3s, background .35s, border-color .35s;
+}
+nav.scrolled { box-shadow: var(--shadow-md); }
+.nav-inner { width: 100%; max-width: 1300px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--g700), var(--g500));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-green); overflow: hidden;
+}
+.logo-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.logo-text .name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--logo-name); display: block; line-height: 1; }
+.logo-text .tagline { font-size: .58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .14em; font-weight: 500; }
+
+.nav-links { display: flex; align-items: center; gap: 2px; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: .81rem; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: all .2s; letter-spacing: .01em; }
+.nav-links a:hover { background: var(--surface2); color: var(--g700); }
+
+.nav-cta { display: flex; align-items: center; gap: 8px; }
+.btn-ghost {
+  padding: 7px 16px; border: 1px solid var(--ghost-border); border-radius: var(--radius-sm);
+  background: transparent; color: var(--ghost-color); font-size: .8rem; font-weight: 600;
+  cursor: pointer; font-family: var(--font-body); transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--g500); color: var(--g600); background: var(--surface2); }
+.btn-nav-cta {
+  padding: 7px 16px; border: none; border-radius: var(--radius-sm);
+  background: var(--g700); color: #fff; font-size: .8rem; font-weight: 600;
+  cursor: pointer; font-family: var(--font-body); transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-nav-cta:hover { background: var(--g800); box-shadow: var(--shadow-green); }
+
+.ham {
+  display: none; width: 36px; height: 36px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--surface);
+  cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+}
+.ham span { display: block; width: 16px; height: 1.5px; background: var(--text-secondary); border-radius: 2px; transition: all .3s; }
+
+.mobile-drawer {
+  display: none; position: fixed; top: 68px; left: 0; right: 0; bottom: 0; z-index: 999;
+  background: var(--bg); padding: 24px 6% 40px;
+  flex-direction: column; gap: 2px; border-top: 1px solid var(--border); overflow-y: auto;
+}
+.mobile-drawer.open { display: flex; }
+.mobile-drawer a { text-decoration: none; color: var(--text-secondary); font-size: .95rem; font-weight: 500; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.mob-btns { display: flex; gap: 10px; margin-top: 20px; }
+.mob-btns button { flex: 1; padding: 12px; border-radius: 8px; font-size: .88rem; font-weight: 600; font-family: var(--font-body); cursor: pointer; }
+.mob-btns .mb1 { border: 1px solid var(--g500); background: transparent; color: var(--g700); }
+.mob-btns .mb2 { border: none; background: var(--g700); color: #fff; }
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding: 100px 4% 80px;
+  display: flex; align-items: center;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+}
+.hero-bg-shape {
+  position: absolute; top: 0; right: 0;
+  width: 52%; height: 100%;
+  background: var(--hero-overlay);
+  clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 0; transition: background .35s;
+}
+.hero-dots {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 32px 32px; opacity: .5;
+}
+.hero-inner {
+  max-width: 1300px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  align-items: center; z-index: 1; position: relative;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--surface2); border: 1px solid var(--border-green);
+  border-radius: 100px; padding: 5px 14px 5px 10px;
+  font-size: .7rem; font-weight: 600; color: var(--g600);
+  letter-spacing: .07em; text-transform: uppercase; margin-bottom: 24px;
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--g500); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+h1.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.5vw, 4.4rem);
+  font-weight: 900; line-height: 1.05;
+  color: var(--text-primary); margin-bottom: 8px;
+  letter-spacing: -.03em;
+}
+h1.hero-title .accent { color: var(--g600); }
+h1.hero-title .line-em { font-style: italic; }
+
+.hero-sub {
+  font-size: .95rem; color: var(--text-secondary);
+  line-height: 1.8; max-width: 480px; margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 52px; }
+.btn-primary {
+  padding: 13px 28px; background: var(--g700); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  font-size: .86rem; font-weight: 600; cursor: pointer;
+  font-family: var(--font-body); display: flex; align-items: center; gap: 8px;
+  transition: all .25s; box-shadow: var(--shadow-green);
+}
+.btn-primary:hover { background: var(--g800); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(21,95,44,.28); }
+.btn-secondary {
+  padding: 13px 28px; background: transparent; color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: .86rem; font-weight: 600; cursor: pointer;
+  font-family: var(--font-body); display: flex; align-items: center; gap: 8px;
+  transition: all .25s;
+}
+.btn-secondary:hover { border-color: var(--g400); color: var(--g600); background: var(--surface2); }
+
+.hero-stats { display: flex; gap: 0; }
+.hs { padding: 0 28px; }
+.hs:first-child { padding-left: 0; }
+.hs + .hs { border-left: 1px solid var(--border); }
+.hs-num { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; color: var(--g600); line-height: 1; }
+.hs-label { font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 3px; }
+
+/* HERO RIGHT */
+.hero-right { position: relative; }
+.farmer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 230px 190px;
+  gap: 10px;
+}
+.farmer-img { position: relative; overflow: hidden; border-radius: var(--radius-lg); }
+.farmer-img.main { grid-column: 1/-1; border-radius: var(--radius-xl); }
+.farmer-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+.farmer-img:hover img { transform: scale(1.04); }
+.farmer-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,20,12,.55) 0%, transparent 55%); }
+.farmer-tag {
+  position: absolute; bottom: 10px; left: 12px;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.22); border-radius: 100px;
+  padding: 3px 10px; font-size: .64rem; font-weight: 700; color: #fff;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* FLOAT BADGE */
+.float-badge {
+  position: absolute; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 11px 15px;
+  box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px; z-index: 10;
+}
+.float-badge.b1 { bottom: -16px; left: -20px; }
+.float-badge.b2 { top: -12px; right: -16px; }
+.fb-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .85rem; color: #fff; flex-shrink: 0; }
+.fb-icon.green { background: linear-gradient(135deg, var(--g700), var(--g400)); }
+.fb-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-light)); }
+.fb-text strong { display: block; font-size: .73rem; font-weight: 700; color: var(--text-primary); }
+.fb-text span { font-size: .63rem; color: var(--text-muted); }
+
+/* ══════════════════════════════════════
+   TRUST BAR
+══════════════════════════════════════ */
+.trust-bar { background: var(--surface2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 4%; }
+.trust-inner { max-width: 1300px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: .78rem; font-weight: 600; }
+.trust-item i { color: var(--g500); font-size: .85rem; }
+
+/* ══════════════════════════════════════
+   SECTION COMMON
+══════════════════════════════════════ */
+section { padding: 96px 4%; }
+.container { max-width: 1300px; margin: 0 auto; }
+
+.sec-label {
+  display: inline-block; background: var(--surface2); border: 1px solid var(--border-green);
+  color: var(--g600); font-size: .66rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .13em; padding: 4px 12px; border-radius: 100px; margin-bottom: 14px;
+}
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3vw, 2.75rem);
+  font-weight: 700; color: var(--text-primary); line-height: 1.12; letter-spacing: -.025em;
+}
+.sec-title .accent { color: var(--g600); }
+.sec-title em { font-style: italic; }
+.sec-sub { color: var(--text-secondary); font-size: .9rem; margin-top: 12px; max-width: 520px; line-height: 1.8; }
+.sec-header { text-align: center; margin-bottom: 60px; }
+.sec-header .sec-sub { margin-left: auto; margin-right: auto; }
+
+/* ══════════════════════════════════════
+   PROBLEMS
+══════════════════════════════════════ */
+.problems { background: var(--bg-alt); }
+.problems-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.prob-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 28px; transition: all .3s; position: relative; overflow: hidden;
+}
+.prob-card-accent {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--g700), var(--g300));
+  transform: scaleX(0); transform-origin: left; transition: transform .35s;
+}
+.prob-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--border-green); }
+.prob-card:hover .prob-card-accent { transform: scaleX(1); }
+.prob-icon {
+  width: 44px; height: 44px; border-radius: 10px; background: var(--surface2);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  color: var(--g600); font-size: 1rem; margin-bottom: 16px;
+}
+.prob-card h3 { font-size: .88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 7px; }
+.prob-card p { font-size: .78rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   SOLUTION
+══════════════════════════════════════ */
+.solution { background: var(--bg); }
+.sol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.sol-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sol-card {
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px; transition: all .25s;
+}
+.sol-card:hover { background: var(--card-hover); border-color: var(--border-green); }
+.sol-icon { width: 38px; height: 38px; border-radius: 9px; background: var(--g700); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .85rem; margin-bottom: 12px; }
+.sol-card h4 { font-size: .83rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+.sol-card p { font-size: .74rem; color: var(--text-secondary); line-height: 1.65; }
+
+.arch-box {
+  background: var(--arch-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-md);
+}
+.arch-top { text-align: center; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+.arch-logo-mark { width: 68px; height: 68px; border-radius: 16px; overflow: hidden; margin: 0 auto 10px; box-shadow: var(--shadow-green); }
+.arch-logo-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+.arch-top h3 { font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); font-weight: 700; }
+.arch-top p { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
+.arch-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.arch-item {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+  font-size: .74rem; color: var(--text-secondary); font-weight: 500; transition: all .2s;
+}
+.arch-item:hover { border-color: var(--border-green); color: var(--g600); }
+.arch-item i { color: var(--g500); font-size: .76rem; width: 12px; text-align: center; }
+
+/* ══════════════════════════════════════
+   PPT SLIDES
+══════════════════════════════════════ */
+.ppt-section { background: var(--bg-alt); }
+.ppt-carousel-wrap { position: relative; max-width: 980px; margin: 0 auto; }
+.ppt-frame {
+  border-radius: var(--radius-xl); overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.ppt-aspect { aspect-ratio: 16/9; position: relative; overflow: hidden; }
+.ppt-track { display: flex; height: 100%; transition: transform .55s cubic-bezier(.4,0,.2,1); }
+.ppt-slide { min-width: 100%; height: 100%; position: relative; flex-shrink: 0; }
+.ppt-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ppt-slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,18,10,.78) 0%, transparent 55%); }
+.ppt-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 32px; }
+.ppt-caption-num {
+  display: inline-block; background: var(--g700); color: #fff;
+  font-size: .65rem; font-weight: 700; padding: 3px 11px; border-radius: 100px;
+  letter-spacing: .09em; text-transform: uppercase; margin-bottom: 8px;
+}
+.ppt-caption h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; line-height: 1.2; }
+.ppt-caption p { font-size: .78rem; color: rgba(255,255,255,.75); max-width: 520px; }
+
+.ppt-controls {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; background: var(--surface); border-top: 1px solid var(--border);
+}
+.ppt-ctrl-left { display: flex; gap: 6px; }
+.ppt-ctrl-right { display: flex; align-items: center; gap: 10px; }
+.ppt-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; transition: all .2s;
+}
+.ppt-btn:hover { background: var(--g700); color: #fff; border-color: var(--g700); }
+.ppt-counter { font-family: var(--font-display); font-size: .95rem; color: var(--text-muted); font-weight: 600; }
+.ppt-dots { display: flex; gap: 5px; flex-wrap: wrap; max-width: 240px; }
+.ppt-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; transition: all .25s; padding: 0; }
+.ppt-dot.active { background: var(--g600); transform: scale(1.35); }
+
+.ppt-thumbs { display: grid; grid-template-columns: repeat(8, 1fr); gap: 7px; margin-top: 14px; }
+.ppt-thumb {
+  aspect-ratio: 16/9; border-radius: 6px; overflow: hidden;
+  border: 2px solid var(--border); cursor: pointer;
+  transition: all .2s; opacity: .55;
+}
+.ppt-thumb:hover { opacity: .9; border-color: var(--g400); }
+.ppt-thumb.active { border-color: var(--g600); opacity: 1; }
+.ppt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ══════════════════════════════════════
+   TECH STACK
+══════════════════════════════════════ */
+.tech { background: var(--bg-alt); }
+.tech-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; }
+.tech-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 18px 10px;
+  text-align: center; transition: all .25s;
+  display: flex; flex-direction: column; align-items: center; gap: 9px;
+}
+.tech-card:hover { border-color: var(--g400); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.tech-card img { width: 36px; height: 36px; object-fit: contain; }
+.tech-card span { font-size: .68rem; font-weight: 600; color: var(--text-muted); line-height: 1.2; }
+
+/* ══════════════════════════════════════
+   FEATURES
+══════════════════════════════════════ */
+.features { background: var(--bg); }
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.feat-card {
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px; transition: all .3s;
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.feat-card:hover { border-color: var(--border-green); background: var(--card-hover); box-shadow: var(--shadow-md); }
+.feat-num {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  background: var(--g700); color: #fff;
+  font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.feat-body h3 { font-size: .88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.feat-body p { font-size: .78rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   IOT SECTION
+══════════════════════════════════════ */
+.iot-section { background: var(--surface2); }
+.iot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.iot-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.iot-img-main { grid-column: 1/-1; border-radius: var(--radius-lg); overflow: hidden; height: 200px; }
+.iot-img-main img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+.iot-img-main:hover img { transform: scale(1.03); }
+.iot-img-sm { border-radius: var(--radius-md); overflow: hidden; height: 148px; }
+.iot-img-sm img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+.iot-img-sm:hover img { transform: scale(1.04); }
+.iot-spec {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 16px; transition: all .2s; margin-top: 12px;
+}
+.iot-spec:first-of-type { margin-top: 16px; }
+.iot-spec:hover { border-color: var(--border-green); }
+.iot-spec-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--g600); font-size: .86rem; flex-shrink: 0; }
+.iot-spec h4 { font-size: .82rem; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+.iot-spec p { font-size: .73rem; color: var(--text-secondary); line-height: 1.55; }
+
+/* ══════════════════════════════════════
+   IMPACT
+══════════════════════════════════════ */
+.impact {
+  background: linear-gradient(140deg, var(--g900) 0%, var(--g700) 100%);
+  position: relative; overflow: hidden;
+}
+.impact::before { content: ''; position: absolute; top: -30%; right: -10%; width: 500px; height: 500px; border-radius: 50%; background: rgba(255,255,255,.04); pointer-events: none; }
+.impact::after { content: ''; position: absolute; bottom: -20%; left: -5%; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,.03); pointer-events: none; }
+.impact .sec-label { background: rgba(255,255,255,.1); color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.18); }
+.impact .sec-title { color: #fff; }
+.impact .sec-sub { color: rgba(255,255,255,.6); }
+.impact-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; position: relative; z-index: 1; }
+.impact-card {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius-lg); padding: 28px; backdrop-filter: blur(8px); transition: all .3s;
+}
+.impact-card:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); transform: translateY(-2px); }
+.impact-icon { font-size: 1.5rem; margin-bottom: 12px; display: block; }
+.impact-card h3 { font-size: .86rem; font-weight: 600; color: #fff; margin-bottom: 7px; }
+.impact-card p { font-size: .77rem; color: rgba(255,255,255,.62); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   WORKFLOW
+══════════════════════════════════════ */
+.workflow { background: var(--bg); }
+.wf-steps { max-width: 720px; margin: 0 auto; }
+.wf-step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.wf-step:last-child { border-bottom: none; }
+.wf-left { display: flex; flex-direction: column; align-items: center; }
+.wf-circle {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--g700); color: #fff;
+  flex-shrink: 0; font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.wf-line { width: 1px; flex: 1; min-height: 20px; background: var(--border); margin-top: 8px; }
+.wf-body { padding-top: 8px; }
+.wf-body h3 { font-size: .88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+.wf-body p { font-size: .78rem; color: var(--text-secondary); line-height: 1.7; }
+.wf-chip {
+  display: inline-block; background: var(--surface2); border: 1px solid var(--border-green);
+  color: var(--chip-color); font-size: .63rem; font-weight: 700; padding: 3px 10px;
+  border-radius: 100px; margin-top: 8px; text-transform: uppercase; letter-spacing: .07em;
+}
+
+/* ══════════════════════════════════════
+   FUTURE ROADMAP
+══════════════════════════════════════ */
+.future { background: var(--bg-alt); }
+.future-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.future-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: all .3s; display: flex; flex-direction: column; gap: 12px;
+}
+.future-card:hover { border-color: var(--border-green); box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.future-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.future-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--g600); font-size: .95rem; }
+.future-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--border-green); line-height: 1; }
+.future-card h3 { font-size: .86rem; font-weight: 600; color: var(--text-primary); }
+.future-card p { font-size: .77rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════ */
+.testimonials { background: var(--bg); }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.testi-card {
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 32px; transition: all .3s;
+}
+.testi-card:hover { border-color: var(--border-green); box-shadow: var(--shadow-md); }
+.tq { font-family: var(--font-display); font-size: 2.8rem; color: var(--g300); line-height: 1; margin-bottom: 12px; }
+.testi-text { font-size: .88rem; color: var(--text-secondary); line-height: 1.85; font-style: italic; margin-bottom: 22px; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.t-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--g700), var(--g400));
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .95rem; flex-shrink: 0;
+}
+.t-name strong { display: block; font-size: .82rem; color: var(--text-primary); }
+.t-name span { font-size: .72rem; color: var(--text-muted); }
+
+/* ══════════════════════════════════════
+   CTA
+══════════════════════════════════════ */
+.cta { background: var(--bg-alt); }
+.cta-box {
+  background: linear-gradient(140deg, var(--g800) 0%, var(--g600) 100%);
+  border-radius: var(--radius-2xl); padding: 80px 48px; text-align: center;
+  position: relative; overflow: hidden; box-shadow: var(--shadow-xl);
+}
+.cta-box::before { content: ''; position: absolute; top: -40%; right: -5%; width: 380px; height: 380px; border-radius: 50%; background: rgba(255,255,255,.04); }
+.cta-box h2 { font-family: var(--font-display); font-size: clamp(2rem,3.5vw,2.8rem); color: #fff; font-weight: 700; margin-bottom: 14px; letter-spacing: -.02em; }
+.cta-box p { color: rgba(255,255,255,.68); font-size: .93rem; margin-bottom: 32px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.75; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-cta-w { padding: 13px 28px; background: #fff; color: var(--g800); border: none; border-radius: var(--radius-sm); font-size: .86rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); transition: all .25s; display: flex; align-items: center; gap: 8px; }
+.btn-cta-w:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
+.btn-cta-o { padding: 13px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radius-sm); font-size: .86rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: all .25s; display: flex; align-items: center; gap: 8px; }
+.btn-cta-o:hover { border-color: rgba(255,255,255,.75); background: rgba(255,255,255,.08); }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer { background: var(--g900); padding: 64px 4% 28px; }
+.footer-top { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand p { color: rgba(255,255,255,.4); font-size: .78rem; line-height: 1.8; margin-top: 14px; max-width: 270px; }
+.footer-socials { display: flex; gap: 7px; margin-top: 18px; }
+.fsoc { width: 32px; height: 32px; border-radius: 7px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); color: rgba(255,255,255,.45); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: .78rem; transition: all .2s; }
+.fsoc:hover { background: var(--g600); border-color: var(--g500); color: #fff; }
+.footer-col h4 { font-size: .76rem; font-weight: 700; color: rgba(255,255,255,.85); margin-bottom: 16px; text-transform: uppercase; letter-spacing: .09em; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { text-decoration: none; color: rgba(255,255,255,.38); font-size: .77rem; transition: color .2s; }
+.footer-col ul li a:hover { color: var(--g300); }
+.footer-bottom { max-width: 1300px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,.07); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.footer-bottom p, .footer-bottom span { font-size: .72rem; color: rgba(255,255,255,.28); }
+.footer-bottom strong { color: var(--g400); }
+.f-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+.f-logo-mark { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; }
+.f-logo-mark img { width: 100%; height: 100%; object-fit: cover; }
+.f-logo .name { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: #fff; }
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width: 1100px) {
+  .tech-grid { grid-template-columns: repeat(6, 1fr); }
+  .ppt-thumbs { grid-template-columns: repeat(8, 1fr); }
+}
+@media(max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 44px; }
+  .hero-bg-shape { display: none; }
+  .hero-right { max-width: 520px; margin: 0 auto; width: 100%; }
+  .sol-grid, .iot-grid { grid-template-columns: 1fr; gap: 40px; }
+  .problems-grid, .impact-grid, .future-grid { grid-template-columns: repeat(2, 1fr); }
+  .feat-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .tech-grid { grid-template-columns: repeat(4, 1fr); }
+  .testi-grid { grid-template-columns: 1fr; max-width: 580px; margin: 0 auto; }
+}
+@media(max-width: 640px) {
+  section { padding: 64px 5%; }
+  .nav-links, .nav-cta { display: none; }
+  .ham { display: flex; }
+  .hero { padding: 90px 5% 52px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { justify-content: center; }
+  .problems-grid, .future-grid, .impact-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: repeat(3, 1fr); }
+  .sol-feats { grid-template-columns: 1fr; }
+  .cta-box { padding: 44px 22px; }
+  .cta-btns { flex-direction: column; }
+  .btn-cta-w, .btn-cta-o { justify-content: center; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .float-badge { display: none; }
+  .arch-items { grid-template-columns: 1fr; }
+  .iot-imgs { grid-template-columns: 1fr; }
+  .iot-img-main { grid-column: 1; }
+  .trust-inner { gap: 20px; }
+  .ppt-thumbs { grid-template-columns: repeat(4, 1fr); }
+  .farmer-grid { grid-template-rows: 180px 140px; }
+  .hero-stats { gap: 0; }
+  .hs { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="logo-mark">
+        <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=100&q=90" alt="Kisan Mitra Logo">
+      </div>
+      <div class="logo-text">
+        <span class="name">Kisan Mitra</span>
+        <span class="tagline">For Farmer Development</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#problems">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#features">Features</a>
+      <a href="#ppt-slides">Our Idea</a>
+      <a href="#iot">IoT Stack</a>
+      <a href="#impact">Impact</a>
+      <a href="#future">Future</a>
+    </div>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <div class="toggle-thumb" id="toggleThumb">
+          <i class="fas fa-sun" id="toggleIcon"></i>
+        </div>
+      </button>
+      <button class="btn-ghost" onclick="location.href='./login.html'">Login</button>
+      <button class="btn-nav-cta" onclick="location.href='./login.html'"><i class="fas fa-leaf"></i> Get Started</button>
+    </div>
+    <button class="ham" id="hamBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="#problems" onclick="closeDraw()">Problem Statement</a>
+  <a href="#solution" onclick="closeDraw()">Our Solution</a>
+  <a href="#features" onclick="closeDraw()">Key Features</a>
+  <a href="#ppt-slides" onclick="closeDraw()">Our Idea (PPT)</a>
+  <a href="#iot" onclick="closeDraw()">IoT Stack</a>
+  <a href="#impact" onclick="closeDraw()">Impact</a>
+  <a href="#future" onclick="closeDraw()">Future Roadmap</a>
+  <div class="mob-btns">
+    <button class="mb1" onclick="location.href='./login.html'">Login</button>
+    <button class="mb2" onclick="location.href='./login.html'">Register Free</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="hero-left reveal">
+      <div class="hero-badge"><div class="badge-dot"></div>&nbsp; 5G + AI + IoT Platform</div>
+      <h1 class="hero-title">Smart Farming<br>for Every <span class="accent"><em>Kisan</em></span></h1>
+      <p class="hero-sub">An integrated platform combining 5G connectivity, AI intelligence, and IoT sensors — empowering Indian farmers with real-time soil insights, disease detection, direct market access, and hassle-free subsidies.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="location.href='./login.html'"><i class="fas fa-seedling"></i> Start Farming Smart</button>
+        <button class="btn-secondary" onclick="document.getElementById('solution').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play-circle"></i> See How It Works</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-num">5+</div><div class="hs-label">Core Modules</div></div>
+        <div class="hs"><div class="hs-num">AI</div><div class="hs-label">Powered Engine</div></div>
+        <div class="hs"><div class="hs-num">5G</div><div class="hs-label">Real-Time Data</div></div>
+        <div class="hs"><div class="hs-num">∞</div><div class="hs-label">Scalable</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right reveal reveal-d2">
+      <div class="farmer-grid">
+        <div class="farmer-img main">
+          <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=85" alt="Indian farmer in field">
+          <div class="farmer-overlay"></div>
+          <div class="farmer-tag">🌾 Farmer First</div>
+        </div>
+        <div class="farmer-img">
+          <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=85" alt="Smart farming technology">
+          <div class="farmer-overlay"></div>
+          <div class="farmer-tag">🤖 AI Smart</div>
+        </div>
+        <div class="farmer-img">
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=85" alt="Crop health">
+          <div class="farmer-overlay"></div>
+          <div class="farmer-tag">🔬 Crop Health</div>
+        </div>
+        <div class="farmer-img">
+          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=85" alt="Farm to market">
+          <div class="farmer-overlay"></div>
+          <div class="farmer-tag">🏪 Direct Market</div>
+        </div>
+      </div>
+      <div class="float-badge b1">
+        <div class="fb-icon green"><i class="fas fa-microscope"></i></div>
+        <div class="fb-text"><strong>Disease Detected</strong><span>Cercospora Leaf Spot — treated</span></div>
+      </div>
+      <div class="float-badge b2">
+        <div class="fb-icon gold"><i class="fas fa-chart-line"></i></div>
+        <div class="fb-text"><strong>Yield +32%</strong><span>AI-optimized crop planning</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><i class="fas fa-shield-alt"></i> Government Certified</div>
+    <div class="trust-item"><i class="fas fa-satellite-dish"></i> 5G Enabled</div>
+    <div class="trust-item"><i class="fas fa-brain"></i> AI-Powered Engine</div>
+    <div class="trust-item"><i class="fas fa-language"></i> 12+ Indian Languages</div>
+    <div class="trust-item"><i class="fas fa-lock"></i> Secure & Private</div>
+    <div class="trust-item"><i class="fas fa-mobile-alt"></i> Works Offline Too</div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="problems" id="problems">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">The Challenge</span>
+      <h2 class="sec-title">Multiple Challenges,<br><span class="accent">No Unified Solution</span></h2>
+      <p class="sec-sub">Indian farmers face fragmented systems, late disease detection, exploitative middlemen and complex subsidies — all at once.</p>
+    </div>
+    <div class="problems-grid">
+      <div class="prob-card reveal">
+        <div class="prob-icon"><i class="fas fa-question-circle"></i></div>
+        <h3>Guess-Based Cultivation</h3>
+        <p>Most farmers rely on tradition instead of real-time soil and climate data, leading to low productivity and poor crop planning.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+      <div class="prob-card reveal reveal-d1">
+        <div class="prob-icon"><i class="fas fa-bug"></i></div>
+        <h3>Late Disease Detection</h3>
+        <p>Diseases are identified only after visible damage, causing huge yield loss and increased pesticide costs across seasons.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+      <div class="prob-card reveal reveal-d2">
+        <div class="prob-icon"><i class="fas fa-handshake-slash"></i></div>
+        <h3>Middlemen Exploitation</h3>
+        <p>Farmers sell through intermediaries at very low prices while consumers pay high retail rates — profits lost in transit.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-icon"><i class="fas fa-file-alt"></i></div>
+        <h3>Complex Subsidy System</h3>
+        <p>Government schemes exist but farmers face paperwork, lack of awareness, and delays — leading to low adoption and misuse.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+      <div class="prob-card reveal reveal-d1">
+        <div class="prob-icon"><i class="fas fa-puzzle-piece"></i></div>
+        <h3>No Unified Platform</h3>
+        <p>Data, guidance, disease support, subsidies, and market access exist in silos — making farming inefficient and fragmented.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+      <div class="prob-card reveal reveal-d2">
+        <div class="prob-icon"><i class="fas fa-wifi"></i></div>
+        <h3>Rural Digital Divide</h3>
+        <p>Limited internet connectivity and low digital literacy keep millions of farmers out of the modern agricultural ecosystem.</p>
+        <div class="prob-card-accent"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution" id="solution">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Our Solution</span>
+      <h2 class="sec-title">Everything In One<br><span class="accent">Unified Platform</span></h2>
+      <p class="sec-sub">5G + AI + IoT — marketplace and subsidy support all working together seamlessly for the Indian farmer.</p>
+    </div>
+    <div class="sol-grid">
+      <div class="sol-feats reveal">
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-brain"></i></div><h4>AI Smart Cultivation</h4><p>IoT sensors detect soil NPK, pH, moisture & weather. AI recommends optimal crop, timing, and soil treatment.</p></div>
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-camera"></i></div><h4>AI Disease Detection</h4><p>Upload leaf images for real-time CNN-based disease diagnosis and treatment suggestions.</p></div>
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-store"></i></div><h4>Direct Marketplace</h4><p>Built-in farmer-to-consumer marketplace eliminates middlemen and maximizes profit margins.</p></div>
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-money-check-alt"></i></div><h4>Guided Subsidies</h4><p>Step-by-step AI guidance with digital POC verification for transparent and hassle-free subsidy claims.</p></div>
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-language"></i></div><h4>Multilingual AI Bot</h4><p>Voice/text support in local languages helps low-digital-literacy farmers access guidance.</p></div>
+        <div class="sol-card"><div class="sol-icon"><i class="fas fa-truck"></i></div><h4>Flexible Logistics</h4><p>Self-pickup or home delivery options ensure smooth last-mile connectivity within the farmer ecosystem.</p></div>
+      </div>
+      <div class="sol-visual reveal reveal-d2">
+        <div class="arch-box">
+          <div class="arch-top">
+            <div class="arch-logo-mark">
+              <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=200&q=90" alt="Kisan Mitra">
+            </div>
+            <h3>Kisan Mitra</h3>
+            <p>Soil → Sale Ecosystem</p>
+          </div>
+          <div class="arch-items">
+            <div class="arch-item"><i class="fas fa-microchip"></i> IoT Sensors</div>
+            <div class="arch-item"><i class="fas fa-cloud"></i> AI Cloud Engine</div>
+            <div class="arch-item"><i class="fas fa-broadcast-tower"></i> 5G + LoRa</div>
+            <div class="arch-item"><i class="fas fa-database"></i> MongoDB Atlas</div>
+            <div class="arch-item"><i class="fas fa-mobile-alt"></i> React Frontend</div>
+            <div class="arch-item"><i class="fas fa-shield-alt"></i> Subsidy POC</div>
+            <div class="arch-item"><i class="fas fa-robot"></i> Bhashini NLP</div>
+            <div class="arch-item"><i class="fas fa-exchange-alt"></i> REST + Socket.IO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PPT SLIDES — Manual only, NO auto-play -->
+<section class="ppt-section" id="ppt-slides">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Our Idea</span>
+      <h2 class="sec-title">Kisan Mitra Vision<br><span class="accent">Slide by Slide</span></h2>
+      <p class="sec-sub">Explore all 16 key concepts behind our smart agriculture platform — from problem to prototype.</p>
+    </div>
+    <div class="ppt-carousel-wrap reveal">
+      <div class="ppt-frame">
+        <div class="ppt-aspect">
+          <div class="ppt-track" id="pptTrack">
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1200&q=85" alt="Slide 1"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 01 — Introduction</div><h3>Kisan Mitra Platform Overview</h3><p>Bridging the gap between Indian farmers and modern technology with 5G + AI + IoT.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1200&q=85" alt="Slide 2"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 02 — Problem Statement</div><h3>The Farmer's Daily Struggle</h3><p>143 million Indian farmers lack access to real-time data, fair markets, and financial support.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=1200&q=85" alt="Slide 3"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 03 — Disease Detection</div><h3>AI-Powered Leaf Disease Detection</h3><p>CNN model trained on 50,000+ leaf images for instant disease identification and treatment.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?w=1200&q=85" alt="Slide 4"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 04 — IoT Hardware</div><h3>ESP-32 Smart Sensor Network</h3><p>NPK + pH + moisture + temperature sensors with LoRa 15km+ transmission range.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=85" alt="Slide 5"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 05 — Marketplace</div><h3>Zero Middlemen Direct Market</h3><p>Farmers earn 3x more by connecting directly to consumers and businesses.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=85" alt="Slide 6"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 06 — Farm to Table</div><h3>Fresh Produce Supply Chain</h3><p>Traceable, certified produce from registered farms reaching consumers within 24 hours.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&q=85" alt="Slide 7"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 07 — Sustainability</div><h3>Climate-Smart Farming Goals</h3><p>Data-driven decisions reduce chemical usage by 35% and increase water efficiency.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=1200&q=85" alt="Slide 8"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 08 — 5G Connectivity</div><h3>Rural 5G Network Deployment</h3><p>Ultra-low latency rural hotspots enabling real-time sensor data and AI processing.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=1200&q=85" alt="Slide 9"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 09 — Tech Architecture</div><h3>System Architecture Deep Dive</h3><p>React + Node.js + Python AI + MongoDB + Socket.IO — a full-stack agri-tech system.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200&q=85" alt="Slide 10"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 10 — Subsidy Module</div><h3>Digital Subsidy Verification System</h3><p>Step-by-step guided workflow with photo proof verification and instant e-certificates.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=1200&q=85" alt="Slide 11"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 11 — AI Models</div><h3>XGBoost + Random Forest Models</h3><p>92.4% accuracy in crop recommendation using soil & climate parameters.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1580983218765-f663bec07b37?w=1200&q=85" alt="Slide 12"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 12 — Drone Integration</div><h3>Aerial Crop Monitoring Network</h3><p>Drone-based field analysis for large farms — NDVI mapping and aerial disease scouting.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=1200&q=85" alt="Slide 13"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 13 — Multi-Crop Support</div><h3>All Crops, All Seasons</h3><p>Covers 60+ crops — from rice, wheat, cotton to spices and vegetables.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1200&q=85" alt="Slide 14"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 14 — Rural Impact</div><h3>Transforming 600,000 Villages</h3><p>Target: 10 million farmers onboarded across India by 2028 with measurable income uplift.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=85" alt="Slide 15"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 15 — Future Roadmap</div><h3>Blockchain + Satellite + AI Scale</h3><p>Phase 2: Autonomous farming, cold storage network, agri-finance, and blockchain supply chain.</p></div></div>
+            <div class="ppt-slide"><img src="https://images.unsplash.com/photo-1439127989242-c3749a012eac?w=1200&q=85" alt="Slide 16"><div class="ppt-slide-overlay"></div><div class="ppt-caption"><div class="ppt-caption-num">Slide 16 — Vision 2030</div><h3>Tomorrow's Agriculture, Today</h3><p>Where 5,000 years of Indian farming tradition meets the intelligence of tomorrow.</p></div></div>
+          </div>
+        </div>
+        <div class="ppt-controls">
+          <div class="ppt-ctrl-left">
+            <button class="ppt-btn" onclick="pptMove(-1)" title="Previous"><i class="fas fa-chevron-left"></i></button>
+            <button class="ppt-btn" onclick="pptMove(1)" title="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="ppt-dots" id="pptDots"></div>
+          <div class="ppt-ctrl-right">
+            <span class="ppt-counter" id="pptCounter">01 / 16</span>
+          </div>
+        </div>
+      </div>
+      <div class="ppt-thumbs" id="pptThumbs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Key Features</span>
+      <h2 class="sec-title">Reimagining Farming with<br><span class="accent">Intelligent Solutions</span></h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal"><div class="feat-num">01</div><div class="feat-body"><h3>AI-Powered Smart Cultivation</h3><p>IoT sensor data and ML models (XGBoost + Random Forest) recommend the right crop, optimal conditions, and soil improvements — increasing yield and reducing risk.</p></div></div>
+      <div class="feat-card reveal reveal-d1"><div class="feat-num">02</div><div class="feat-body"><h3>Real-Time Crop Health Monitoring</h3><p>Upload images for instant CNN-based disease detection and treatment suggestions, ensuring early intervention and minimizing crop losses.</p></div></div>
+      <div class="feat-card reveal"><div class="feat-num">03</div><div class="feat-body"><h3>Guided Farming & Subsidy Integration</h3><p>Step-by-step cultivation guidance aligned with government schemes, along with digital proof verification for transparent subsidy access.</p></div></div>
+      <div class="feat-card reveal reveal-d1"><div class="feat-num">04</div><div class="feat-body"><h3>Direct Marketplace with Logistics</h3><p>Connects farmers directly to consumers and businesses, eliminating middlemen, with flexible delivery options to maximize farmer profits.</p></div></div>
+      <div class="feat-card reveal"><div class="feat-num">05</div><div class="feat-body"><h3>Multilingual & Data-Driven Support</h3><p>Multilingual AI assistant and insights dashboard, making the platform accessible while helping farmers make informed, data-driven decisions.</p></div></div>
+      <div class="feat-card reveal reveal-d1"><div class="feat-num">06</div><div class="feat-body"><h3>Integrated Financial & Advisory</h3><p>Connects farmers with loans, insurance, and expert guidance based on their verified farming data, improving financial access and reducing risk.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- IOT -->
+<section class="iot-section" id="iot">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">IoT Hardware Stack</span>
+      <h2 class="sec-title">Physical Intelligence<br><span class="accent">In Your Field</span></h2>
+      <p class="sec-sub">Smart sensors gather soil and climate data 24/7, transmitted via 5G and LoRa to our AI cloud for instant analysis.</p>
+    </div>
+    <div class="iot-grid">
+      <div class="iot-imgs reveal">
+        <div class="iot-img-main"><img src="https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?w=900&q=80" alt="IoT sensors in field"></div>
+        <div class="iot-img-sm"><img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=500&q=80" alt="Electronic sensor board"></div>
+        <div class="iot-img-sm"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80" alt="Smart agriculture tech"></div>
+      </div>
+      <div class="iot-content reveal reveal-d2">
+        <span class="sec-label">Sensor Specifications</span>
+        <h2 class="sec-title" style="font-size:1.85rem;">ESP-32 + LoRa<br><span class="accent">Sensor Platform</span></h2>
+        <p class="sec-sub" style="margin-left:0;">Military-grade sensors collect hyper-local soil intelligence and stream it to the Kisan Mitra cloud in real-time.</p>
+        <div class="iot-spec">
+          <div class="iot-spec-icon"><i class="fas fa-vial"></i></div>
+          <div><h4>NPK Soil Sensor</h4><p>Measures Nitrogen, Phosphorus & Potassium levels with ±2% accuracy for precision fertilizer recommendations.</p></div>
+        </div>
+        <div class="iot-spec">
+          <div class="iot-spec-icon"><i class="fas fa-tint"></i></div>
+          <div><h4>Moisture & pH Sensor</h4><p>Real-time soil moisture and pH monitoring to optimize irrigation schedules and detect soil imbalances.</p></div>
+        </div>
+        <div class="iot-spec">
+          <div class="iot-spec-icon"><i class="fas fa-thermometer-half"></i></div>
+          <div><h4>Temperature & Humidity DHT22</h4><p>Hyper-local microclimate data collection for weather-aware crop planning and disease risk assessment.</p></div>
+        </div>
+        <div class="iot-spec">
+          <div class="iot-spec-icon"><i class="fas fa-broadcast-tower"></i></div>
+          <div><h4>LoRa Long Range Transmission</h4><p>15km+ range data transmission with ultra-low power consumption — works even without mobile network.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech" id="tech">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Tech Stack</span>
+      <h2 class="sec-title">The Digital Backbone of<br><span class="accent">Smart Agriculture</span></h2>
+    </div>
+    <div class="tech-grid reveal">
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"><span>React JS</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5"><span>HTML5 / CSS3</span></div>
+      <div class="tech-card"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" alt="Tailwind"><span>Tailwind CSS</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js"><span>Node.js</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express" style="filter:invert(0.4) sepia(1) saturate(2) hue-rotate(90deg)"><span>Express JS</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" alt="Socket.IO"><span>Socket.IO</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB"><span>MongoDB</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+      <div class="tech-card"><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-learn"><span>Random Forest</span></div>
+      <div class="tech-card"><img src="https://upload.wikimedia.org/wikipedia/commons/6/69/XGBoost_logo.png" alt="XGBoost"><span>XGBoost</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow"><span>CNN / TF</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google"><span>Google Translate</span></div>
+      <div class="tech-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Espressif_Systems_logo.svg/320px-Espressif_Systems_logo.svg.png" alt="ESP32" style="object-fit:contain; width:60px; height:28px;"><span>ESP-32 IoT</span></div>
+      <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub"><span>GitHub</span></div>
+      <div class="tech-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Vercel_logo_black.svg/512px-Vercel_logo_black.svg.png" alt="Vercel" style="filter:invert(0.5) sepia(1) saturate(3) hue-rotate(90deg)"><span>Vercel</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Impact</span>
+      <h2 class="sec-title">Creating Sustainable Impact<br>Across Rural Communities</h2>
+      <p class="sec-sub">Kisan Mitra drives both societal transformation and industry-level innovation.</p>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="impact-card"><span class="impact-icon">📢</span><h3>Farmer Empowerment</h3><p>Real-time info on government schemes, subsidies, and deadlines — reducing dependency on middlemen.</p></div>
+      <div class="impact-card"><span class="impact-icon">📉</span><h3>Reduction in Farmer Distress</h3><p>Timely insights on crops, pricing, and financial support help lower debt burden and prevent extreme situations.</p></div>
+      <div class="impact-card"><span class="impact-icon">🌐</span><h3>Bridging Rural Digital Divide</h3><p>Rural hotspot creation and 5G-enabled connectivity bring remote farmers into the digital ecosystem.</p></div>
+      <div class="impact-card"><span class="impact-icon">📈</span><h3>Boost to Agri-Tech Industry</h3><p>Encourages innovation in IoT devices, AI-based agriculture tools, and smart farming solutions nationwide.</p></div>
+      <div class="impact-card"><span class="impact-icon">📶</span><h3>Telecom Industry Expansion</h3><p>Increased demand for rural connectivity drives growth in 5G infrastructure and network services.</p></div>
+      <div class="impact-card"><span class="impact-icon">🚚</span><h3>Supply Chain Optimization</h3><p>Digital tracking and direct farmer-to-market linkage improve efficiency and reduce logistics costs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="workflow" id="workflow">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">System Workflow</span>
+      <h2 class="sec-title">End-to-End Smart<br><span class="accent">Agriculture Journey</span></h2>
+    </div>
+    <div class="wf-steps reveal">
+      <div class="wf-step">
+        <div class="wf-left"><div class="wf-circle">1</div><div class="wf-line"></div></div>
+        <div class="wf-body"><h3>Register & Deploy Sensors</h3><p>Farmer registers on the platform, deploys IoT soil sensors (NPK, pH, moisture, temperature) and receives an AI-based crop recommendation.</p><span class="wf-chip">Farmer Onboarding</span></div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-left"><div class="wf-circle">2</div><div class="wf-line"></div></div>
+        <div class="wf-body"><h3>AI Cultivation & Disease Monitoring</h3><p>Real-time soil telemetry analyzed by XGBoost + Neural Network models. Leaf images processed by CNN for disease diagnosis and treatment suggestions.</p><span class="wf-chip">Smart Farming</span></div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-left"><div class="wf-circle">3</div><div class="wf-line"></div></div>
+        <div class="wf-body"><h3>Subsidy Application & Verification</h3><p>Farmers follow guided steps, upload proof-of-steps photos. Admin validates data and issues the digital subsidy certificate seamlessly.</p><span class="wf-chip">Government Schemes</span></div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-left"><div class="wf-circle">4</div><div class="wf-line"></div></div>
+        <div class="wf-body"><h3>List Products on Marketplace</h3><p>Farmers upload harvested products with region-wise pricing data. Consumers browse and buy directly from nearby farms at fair prices.</p><span class="wf-chip">Direct Market</span></div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-left"><div class="wf-circle">5</div></div>
+        <div class="wf-body"><h3>Delivery & Revenue Tracking</h3><p>Flexible doorstep or self-pickup delivery options. Farmers track revenue, orders, and growth through their personal dashboard.</p><span class="wf-chip">Last Mile & Analytics</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section class="future" id="future">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Future Roadmap</span>
+      <h2 class="sec-title">Building the Future of<br><span class="accent">Scalable Agriculture</span></h2>
+    </div>
+    <div class="future-grid reveal">
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-robot"></i></div><div class="future-num">01</div></div><h3>Autonomous Farming Systems</h3><p>Deploy smart tractors, robotic weeders, and automated harvesters controlled via 5G-enabled networks for precision agriculture.</p></div>
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-snowflake"></i></div><div class="future-num">02</div></div><h3>Decentralized Cold Storage</h3><p>Low-cost, solar-powered micro cold storage units at village level to solve food preservation and reduce post-harvest losses.</p></div>
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-university"></i></div><div class="future-num">03</div></div><h3>Agri-Finance Integration</h3><p>Collaborate with banks and agri-companies for farmers to access loans and buy essentials on one platform.</p></div>
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-link"></i></div><div class="future-num">04</div></div><h3>Blockchain Supply Chain</h3><p>Ensure transparency and fair pricing by tracking produce from farm to market, reducing middlemen dependency permanently.</p></div>
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-chart-bar"></i></div><div class="future-num">05</div></div><h3>Smart Market Intelligence</h3><p>Real-time price prediction and demand analysis to help farmers decide the best time and place to sell crops profitably.</p></div>
+      <div class="future-card"><div class="future-card-top"><div class="future-icon"><i class="fas fa-satellite"></i></div><div class="future-num">06</div></div><h3>Satellite + IoT + 5G</h3><p>Combine satellite imagery with IoT sensor data for large-scale monitoring, soil mapping, and regional climate analysis.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS — Static grid, no auto-rotation -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="sec-header reveal">
+      <span class="sec-label">Farmer Stories</span>
+      <h2 class="sec-title">Voices from the <span class="accent">Field</span></h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="tq">"</div>
+        <p class="testi-text">Kisan Mitra changed everything for me. The soil sensor told me my land needed potassium, and after following the AI recommendation, my tomato yield increased by 40%. I no longer have to guess what to plant.</p>
+        <div class="testi-author"><div class="t-avatar">R</div><div class="t-name"><strong>Ramesh Patel</strong><span>Tomato Farmer, Gujarat</span></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="tq">"</div>
+        <p class="testi-text">Before, I used to sell onions to a middleman for ₹8/kg. Now through Kisan Mitra's marketplace, I sell directly for ₹22/kg. My family income has nearly tripled in just one season.</p>
+        <div class="testi-author"><div class="t-avatar">S</div><div class="t-name"><strong>Sunita Devi</strong><span>Onion Farmer, Maharashtra</span></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="tq">"</div>
+        <p class="testi-text">The disease detection feature is incredible. I uploaded a photo of my corn leaves and within seconds the app told me it was Gray Leaf Spot and suggested Antracol fungicide. Saved my entire harvest!</p>
+        <div class="testi-author"><div class="t-avatar">M</div><div class="t-name"><strong>Mahesh Singh</strong><span>Corn Farmer, Uttar Pradesh</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-box reveal">
+      <h2>Ready to Transform Your Farm?</h2>
+      <p>Join thousands of farmers already using Kisan Mitra to grow smarter, earn more, and farm sustainably with 5G + AI + IoT.</p>
+      <div class="cta-btns">
+        <button class="btn-cta-w" onclick="location.href='./login.html'"><i class="fas fa-seedling"></i> Register as Farmer</button>
+        <button class="btn-cta-o" onclick="location.href='./login.html'"><i class="fas fa-shopping-cart"></i> Join as Consumer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="f-logo" href="#">
+        <div class="f-logo-mark"><img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=100&q=90" alt="Kisan Mitra Logo"></div>
+        <span class="name">Kisan Mitra</span>
+      </a>
+      <p>An integrated 5G + AI + IoT platform empowering Indian farmers with smart cultivation, disease detection, direct market access, and hassle-free subsidies.</p>
+      <div class="footer-socials">
+        <a href="#" class="fsoc"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="fsoc"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="fsoc"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="fsoc"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="fsoc"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">Soil Analytics</a></li>
+        <li><a href="#">Disease Detection</a></li>
+        <li><a href="#">Marketplace</a></li>
+        <li><a href="#">Subsidy Guide</a></li>
+        <li><a href="#">AI Chatbot</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Team Agro Visionaries</a></li>
+        <li><a href="#">Hackathon 2026</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Farmer Helpline</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Kisan Mitra Platform. All Rights Reserved.</p>
+    <span>Developed by <strong>Team Agro Visionaries</strong> 🌱</span>
+  </div>
+</footer>
+
+<script>
+/* ── THEME TOGGLE ── */
+const html = document.documentElement;
+const toggleIcon = document.getElementById('toggleIcon');
+const saved = localStorage.getItem('kisan-theme') || 'light';
+html.setAttribute('data-theme', saved);
+updateIcon(saved);
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('kisan-theme', next);
+  updateIcon(next);
+});
+function updateIcon(t) { toggleIcon.className = t === 'dark' ? 'fas fa-moon' : 'fas fa-sun'; }
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ── MOBILE DRAWER ── */
+document.getElementById('hamBtn').addEventListener('click', () => {
+  document.getElementById('mobileDrawer').classList.toggle('open');
+});
+function closeDraw() { document.getElementById('mobileDrawer').classList.remove('open'); }
+
+/* ── PPT CAROUSEL — MANUAL ONLY, NO AUTO-PLAY ── */
+const PPT_TOTAL = 16;
+let pptCur = 0;
+const pptTrackEl = document.getElementById('pptTrack');
+const pptDotsEl  = document.getElementById('pptDots');
+const pptThumbsEl = document.getElementById('pptThumbs');
+const pptCounterEl = document.getElementById('pptCounter');
+
+const pptImgs = [
+  'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=200&q=70',
+  'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=200&q=70',
+  'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=70',
+  'https://images.unsplash.com/photo-1597916829826-02e5bb4a54e0?w=200&q=70',
+  'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=70',
+  'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=200&q=70',
+  'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=200&q=70',
+  'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=200&q=70',
+  'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=200&q=70',
+  'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=200&q=70',
+  'https://images.unsplash.com/photo-1518843875459-f738682238a6?w=200&q=70',
+  'https://images.unsplash.com/photo-1580983218765-f663bec07b37?w=200&q=70',
+  'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=200&q=70',
+  'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=200&q=70',
+  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&q=70',
+  'https://images.unsplash.com/photo-1439127989242-c3749a012eac?w=200&q=70',
+];
+
+/* Build dots */
+for (let i = 0; i < PPT_TOTAL; i++) {
+  const d = document.createElement('button');
+  d.className = 'ppt-dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => pptGoTo(i));
+  pptDotsEl.appendChild(d);
+}
+
+/* Build thumbnails */
+pptImgs.forEach((src, i) => {
+  const t = document.createElement('div');
+  t.className = 'ppt-thumb' + (i === 0 ? ' active' : '');
+  t.innerHTML = `<img src="${src}" alt="Slide ${i+1}" loading="lazy">`;
+  t.addEventListener('click', () => pptGoTo(i));
+  pptThumbsEl.appendChild(t);
+});
+
+function pptGoTo(n) {
+  pptCur = (n + PPT_TOTAL) % PPT_TOTAL;
+  pptTrackEl.style.transform = `translateX(-${pptCur * 100}%)`;
+  pptDotsEl.querySelectorAll('.ppt-dot').forEach((d, i) => d.classList.toggle('active', i === pptCur));
+  pptThumbsEl.querySelectorAll('.ppt-thumb').forEach((t, i) => t.classList.toggle('active', i === pptCur));
+  pptCounterEl.textContent = String(pptCur + 1).padStart(2,'0') + ' / ' + String(PPT_TOTAL).padStart(2,'0');
+  const activeTh = pptThumbsEl.querySelectorAll('.ppt-thumb')[pptCur];
+  if (activeTh) activeTh.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+}
+
+function pptMove(dir) { pptGoTo(pptCur + dir); }
+
+/* Keyboard navigation */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') pptMove(1);
+  if (e.key === 'ArrowLeft')  pptMove(-1);
+});
+
+/* ── SCROLL REVEAL (IntersectionObserver only, no animation timers) ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
